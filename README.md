@@ -7,4 +7,4 @@ Doing Procedural Generated Music for Glam Rock
 - test.js => Tests for the pitch
 
 #To clone and test this out, use this:
-`git clone `
+`git clone https://github.com/JustKenjiKenji/AI_Project.git`
