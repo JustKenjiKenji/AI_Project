@@ -8,9 +8,9 @@ var queue=[];
 player.loader.decodeAfterLoading(audioContext, '_drum_36_6_JCLive_sf2_file');
 player.loader.decodeAfterLoading(audioContext, '_drum_40_6_JCLive_sf2_file');
 player.loader.decodeAfterLoading(audioContext, '_drum_42_6_JCLive_sf2_file');
+player.loader.decodeAfterLoading(audioContext, '_drum_46_6_JCLive_sf2_file');
 player.loader.decodeAfterLoading(audioContext, '_tone_0390_Aspirin_sf2_file');
 player.loader.decodeAfterLoading(audioContext, '_tone_0480_Chaos_sf2_file');
-player.loader.decodeAfterLoading(audioContext, '_drum_46_6_JCLive_sf2_file');
 player.	loader.decodeAfterLoading(audioContext, '_tone_0550_Chaos_sf2_file');
 
 
@@ -30,7 +30,7 @@ var gainHit = audioContext.createGain();
 gainHit.connect(audioContext.destination);
 gainHit.gain.value=0.5;
 			
-const bpm = 20; //Beats per Minute
+const bpm = 130; //Beats per Minute
 const N = 4 * 60 / bpm; //Seconds per measure
 const pieceLen = 8 * N; //4-Bar musical phase
 const beatLen=1/16 * N; //Duration of one 16th-Note in second
@@ -80,8 +80,7 @@ function pause(){
 }
 
 function start() {
-	const slowFactor = 10; //Halfs speed
-	ticker.playLoop(player, audioContext, 0, ticker.lastPosition, pieceLen * slowFactor, queue);
+	ticker.playLoop(player, audioContext, 0, ticker.lastPosition, pieceLen, queue);
 }
 
 var notes=[

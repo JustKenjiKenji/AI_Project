@@ -1,0 +1,157 @@
+		
+var AudioContextFunc = window.AudioContext || window.webkitAudioContext;		
+var audioContext = new AudioContextFunc();		
+var player = new WebAudioFontPlayer();		
+		
+var channelDrums = player.createChannel(audioContext);		
+var channelBass = player.createChannel(audioContext);		
+var channelDistortion = player.createChannel(audioContext);	
+var channelMaster = player.createChannel(audioContext);	
+var reverberator = player.createReverberator(audioContext);	
+
+channelDrums.output.connect(channelMaster.input);
+channelBass.output.connect(channelMaster.input);
+channelDistortion.output.connect(channelMaster.input);
+channelMaster.output.connect(reverberator.input);
+		
+//reverberator.output.connect(audioContext.destination);
+player.adjustPreset(audioContext,_tone_0280_LesPaul_sf2);		
+player.adjustPreset(audioContext,_tone_0300_LesPaul_sf2);		
+player.adjustPreset(audioContext,_tone_0340_SBLive_sf2);		
+player.adjustPreset(audioContext,_drum_35_0_SBLive_sf2);		
+player.adjustPreset(audioContext,_drum_38_0_SBLive_sf2);		
+player.adjustPreset(audioContext,_drum_42_0_SBLive_sf2);
+
+
+		var bpm = 20;		
+		var N = 4 * 60 / bpm;		
+		var pieceLen = 2 * N;		
+		var beatLen=1/8 * N;		
+		var C2 = 0+12*2, c2 = 1+12*2, D2 = 2+12*2, d2 = 3+12*2, E2 = 4+12*2, F2 = 5+12*2, f2 = 6+12*2, G2 = 7+12*2, g2 = 8+12*2, A2 = 9+12*2, a2 = 10+12*2, B2 = 11+12*2;		
+		var C3 = 0+12*3, c3 = 1+12*3, D3 = 2+12*3, d3 = 3+12*3, E3 = 4+12*3, F3 = 5+12*3, f3 = 6+12*3, G3 = 7+12*3, g3 = 8+12*3, A3 = 9+12*3, a3 = 10+12*3, B3 = 11+12*3;		
+		var C4 = 0+12*4, c4 = 1+12*4, D4 = 2+12*4, d4 = 3+12*4, E4 = 4+12*4, F4 = 5+12*4, f4 = 6+12*4, G4 = 7+12*4, g4 = 8+12*4, A4 = 9+12*4, a4 = 10+12*4, B4 = 11+12*4;		
+		var C5 = 0+12*5, c5 = 1+12*5, D5 = 2+12*5, d5 = 3+12*5, E5 = 4+12*5, F5 = 5+12*5, f5 = 6+12*5, G5 = 7+12*5, g5 = 8+12*5, A5 = 9+12*5, a5 = 10+12*5, B5 = 11+12*5;		
+		var C6 = 0+12*6, c6 = 1+12*6, D6 = 2+12*6, d6 = 3+12*6, E6 = 4+12*6, F6 = 5+12*6, f6 = 6+12*6, G6 = 7+12*6, g6 = 8+12*6, A6 = 9+12*6, a6 = 10+12*6, B6 = 11+12*6;		
+		var started = false;		
+		var startTime = 0;		
+		function overDrive(pitch, duration, slides){return {target:channelDistortion,preset:_tone_0300_LesPaul_sf2,pitch:pitch,duration:duration*N,volume:0.5,slides:slides};}		
+		function palmMute(pitch, duration){return {target:channelDistortion,preset:_tone_0280_LesPaul_sf2,pitch:pitch,duration:duration*N,volume:0.3};}		
+		function bass(pitch, duration){return {target:channelBass,preset:_tone_0340_SBLive_sf2,pitch:pitch,duration:duration*N,volume:0.5};}		
+		function drum(){return {target:channelDrums,preset:_drum_35_0_SBLive_sf2,pitch:35,duration:1,volume:0.7};}		
+		function snare(){return {target:channelDrums,preset:_drum_38_0_SBLive_sf2,pitch:38,duration:1,volume:0.5};}		
+		function hiHat(){return {target:channelDrums,preset:_drum_42_0_SBLive_sf2,pitch:42,duration:1,volume:0.5};}		
+		function toggleFlanger(on){
+			if(on){
+				reverberator.output.disconnect(audioContext.destination);
+				reverberator.output.connect(flanger.node);
+				flanger.output.connect(audioContext.destination);
+			}else{
+				reverberator.output.disconnect(flanger.node);
+				flanger.output.disconnect(audioContext.destination);
+				reverberator.output.connect(audioContext.destination);
+			}
+		}
+
+class flangerNode {
+    constructor(audioContext, fromNode, toNode) {
+        this.nodes = {
+            inputGainNode: audioContext.createGain(), // Create the input gain-node
+            wetGainNode: audioContext.createGain(), // Create the wetness controll gain-node
+            delayNode: audioContext.createDelay(), // Create the delay node
+            gainNode: audioContext.createGain(), // Create the gain controll gain-node
+            feedbackGainNode: audioContext.createGain(), // Create the feedback controll gain-node
+            oscillatorNode: audioContext.createOscillator() // Create the oscilator node
+        };
+        this.nodes['oscillatorNode'].connect(this.nodes['gainNode']);
+        this.nodes['gainNode'].connect(this.nodes['delayNode'].delayTime);
+        this.nodes['inputGainNode'].connect(this.nodes['wetGainNode']);
+        this.nodes['inputGainNode'].connect(this.nodes['delayNode']);
+        this.nodes['delayNode'].connect(this.nodes['wetGainNode']);
+        this.nodes['delayNode'].connect(this.nodes['feedbackGainNode']);
+        this.nodes['feedbackGainNode'].connect(this.nodes['inputGainNode']);
+        // Setup the oscillator
+        this.nodes['oscillatorNode'].type = 'sine';
+        this.nodes['oscillatorNode'].start(0);
+        // Set the input gain-node as the input-node.
+        this.node = this.nodes['inputGainNode'];
+        // Set the output gain-node as the output-node.
+        this.output = this.nodes['wetGainNode'];
+        // Set the default delay of 0.005 seconds
+        this.delay = 0.005;
+        // Set the default depth to 0.002;
+        this.depth = 0.002;
+        // Set the default feedback to 0.5
+        this.feedback = 0.5;
+        // Set the default speed to 0.25Hz
+        this.speed = 0.25;
+        this.reset = function () {
+            this.nodes['delayNode'].delayTime.value = this.delay;
+            this.nodes['gainNode'].gain.value = this.depth;
+            this.nodes['feedbackGainNode'].gain.value = this.feedback;
+            this.nodes['oscillatorNode'].frequency.value = this.speed;
+        };
+        fromNode.connect(this.node);
+        this.output.connect(toNode);
+        this.reset();
+        return this;
+    }
+}
+
+var flanger= new flangerNode(audioContext,reverberator.output,audioContext.destination);
+console.log('flanger',flanger);
+
+ var notes=[		
+ ////////////////////////////////////////////////////////////////////////////////////		
+  [overDrive(D4,1/4,[{when:1/8,delta:-2}]),bass(B2,1/8),drum()        ,hiHat(), overDrive(A4,1/4,[{when:1/8,delta:-2}])]		
+ ,[                                        bass(B2,1/8)               ,hiHat()]		
+ ,[palmMute(B3,1/8)                       ,bass(B2,1/8)       ,snare(),hiHat()]		
+ ,[overDrive(B3,1/4),                      bass(B2,1/8),drum()        ,hiHat(), overDrive(f4,1/4)]		
+ ,[                                        bass(B2,1/8),drum()        ,hiHat()]		
+ ,[palmMute(B3,1/8)                       ,bass(B2,1/8)               ,hiHat()]		
+ ,[overDrive(B3,1/4)                      ,bass(B2,1/8)       ,snare(),hiHat(), overDrive(f4,1/4)]		
+ ,[                                        bass(B2,1/8)               ,hiHat()]		
+ ,[palmMute(A3,1/8)                       ,bass(B2,1/8),drum()        ,hiHat()]		
+ ,[overDrive(B3,1/8)                      ,bass(B2,1/8),drum()        ,hiHat(), overDrive(f4,1/8)]		
+ ,[palmMute(c4,1/8)                       ,bass(B2,1/8)       ,snare(),hiHat()]		
+ ,[overDrive(B3,1/4)                      ,bass(B2,1/8)               ,hiHat(), overDrive(f4,1/4)]		
+ ,[                                        bass(B2,1/8),drum()        ,hiHat()]		
+ ,[palmMute(B3,1/8)                       ,bass(B2,1/8)               ,hiHat()]		
+ ,[overDrive(B3,1/4)                      ,bass(B2,1/8)       ,snare(),hiHat(), overDrive(f4,1/4)]		
+ ,[                                        bass(B2,1/8)       ,snare(),hiHat()]		
+ ////////////////////////////////////////////////////////////////////////////////////		
+ ];		
+		
+function nextPiece() {		
+	for (var n = 0; n < notes.length; n++) {		
+	    var beat = notes[n];		
+		for (var i = 0; i < beat.length; i++) {		
+			if (beat[i]) {		
+				var slides=[];		
+				if(beat[i].slides){		
+					for(var s=0;s<beat[i].slides.length;s++){		
+						slides.push({when:beat[i].slides[s].when*N,delta:beat[i].slides[s].delta});		
+					}		
+				}
+		    player.queueWaveTable(audioContext,  beat[i].target.input, beat[i].preset, startTime + n * beatLen , beat[i].pitch, beat[i].duration,beat[i].volume, slides);//[{when:startTime + n * beatLen+beat[i].duration,pitch:beat[i].pitch-12}]);		
+			}		
+		}		
+	}		
+}		
+		function start() {		
+			if (started) {		
+				console.log('started already');		
+			} else {		
+				started = true;		
+				startTime = audioContext.currentTime + 0.1;		
+				nextPiece();		
+				startTime = startTime + pieceLen;		
+				setInterval(function () {		
+					if (audioContext.currentTime > startTime - 1 / 4 * N) {		
+						nextPiece();		
+						startTime = startTime + pieceLen;		
+					}		
+				}, 20);		
+			}		
+		}		
+
+	

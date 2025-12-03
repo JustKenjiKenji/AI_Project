@@ -1,0 +1,111 @@
+<html>
+    <head>		
+	<script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
+	<script src="https://surikov.github.io/webaudiofontdata/sound/0280_LesPaul_sf2.js"></script>		
+	<script src="https://surikov.github.io/webaudiofontdata/sound/0300_LesPaul_sf2.js"></script>		
+	<script src="https://surikov.github.io/webaudiofontdata/sound/0340_SBLive_sf2.js"></script>		
+	<script src="https://surikov.github.io/webaudiofontdata/sound/12835_0_SBLive_sf2.js"></script>		
+	<script src="https://surikov.github.io/webaudiofontdata/sound/12838_0_SBLive_sf2.js"></script>		
+	<script src="https://surikov.github.io/webaudiofontdata/sound/12842_0_SBLive_sf2.js"></script>		
+	<script src="testMixer.js"></script>		
+<style>
+input[type=range][orient=vertical]
+{
+    writing-mode: bt-lr; /* IE */
+    width: 8px;
+    height: 175px;
+    padding: 0 5px;
+}
+</style>
+</head>		
+<body>		
+	<p><a href="#" onmousedown="start();">Play</a></p>	
+	<ul>
+        <!--VOLUME-->
+            <!--MASTER-->
+		<li>master volume <input type="range" value="1.0" min="0.0" max="1.5" step="0.1" 
+            onchange="channelMaster.output.gain.setTargetAtTime(value,0,0.0001);">
+        </li>
+            <!--DRUMS-->
+		<li>drum volume <input type="range" value="1.0" min="0.0" max="1.5" step="0.1" 
+            onchange="channelDrums.output.gain.setTargetAtTime(value,0,0.0001);">
+        </li>
+            <!--BASS-->
+		<li>bass volume <input type="range" value="1.0" min="0.0" max="1.5" step="0.1" 
+            onchange="channelBass.output.gain.setTargetAtTime(value,0,0.0001);">
+        </li>
+
+        <!--GUITAR-->
+		<li>guitar volume <input type="range" value="1.0" min="0.0" max="1.5" step="0.1" 
+            onchange="channelDistortion.output.gain.setTargetAtTime(value,0,0.0001);">
+        </li>
+
+
+		<li>echo <input type="range" value="0.5" min="0.0" max="1.5" step="0.1" onchange="reverberator.wet.gain.setTargetAtTime(value,0,0.0001);"></li>
+		<li>compressor <input type="range" value="0.0" min="0.0" max="1.0" step="0.1" onchange="reverberator.compressorWet.gain.setTargetAtTime(value,0,0.0001);reverberator.compressorDry.gain.setTargetAtTime(1-value,0,0.0001);"></li>
+		<li>compressor threshold <input type="range" value="-50" min="-100" max="0" step="10" onchange="reverberator.compressor.threshold.setValueAtTime(value, 0);"></li>
+		<li>compressor knee <input type="range" value="40" min="0" max="40" step="5" onchange="reverberator.compressor.knee.setValueAtTime(value, 0)"></li>
+		<li>compressor ratio <input type="range" value="12" min="1" max="20" step="1" onchange="reverberator.compressor.ratio.setValueAtTime(value, 0);"></li>
+		<li>compressor attack <input type="range" value="0" min="0" max="1" step="0.01" onchange="reverberator.compressor.attack.setValueAtTime(value, 0);"></li>
+		<li>compressor release <input type="range" value="0.25" min="0" max="1" step="0.01" onchange="reverberator.compressor.release.setValueAtTime(value, 0);"></li>
+		<li><input type="checkbox" checked="" onchange="toggleFlanger(checked);"> flanger</li>
+		<li>flanger delay <input type="range" value="0.005" min="0" max="0.010" step="0.001" onchange="flanger.delay=value;flanger.reset();"></li>
+		<li>flanger depth <input type="range" value="0.002" min="0" max="0.010" step="0.001" onchange="flanger.depth=value;flanger.reset();"></li>
+		<li>flanger feedback <input type="range" value="0.5" min="0" max="0.7" step="0.1" onchange="flanger.feedback=value;flanger.reset();"></li>
+		<li>flanger speed <input type="range" value="0.25" min="0.05" max="0.75" step="0.05" onchange="flanger.speed=value;flanger.reset();"></li>
+	</ul>
+	<p>Master equalizer</p>	
+	<p>
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelMaster.band32.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelMaster.band64.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelMaster.band128.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelMaster.band256.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelMaster.band512.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelMaster.band1k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelMaster.band2k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelMaster.band4k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelMaster.band8k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelMaster.band16k.gain.setTargetAtTime(value,0,0.0001);">
+	</p>
+	<p>Drum equalizer</p>	
+	<p>
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDrums.band32.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDrums.band64.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDrums.band128.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDrums.band256.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDrums.band512.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDrums.band1k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDrums.band2k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDrums.band4k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDrums.band8k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDrums.band16k.gain.setTargetAtTime(value,0,0.0001);">
+	</p>
+	<p>Bass equalizer</p>	
+	<p>
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelBass.band32.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelBass.band64.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelBass.band128.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelBass.band256.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelBass.band512.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelBass.band1k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelBass.band2k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelBass.band4k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelBass.band8k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelBass.band16k.gain.setTargetAtTime(value,0,0.0001);">
+	</p>
+	<p>Guitar equalizer</p>	
+	<p>
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDistortion.band32.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDistortion.band64.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDistortion.band128.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDistortion.band256.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDistortion.band512.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDistortion.band1k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDistortion.band2k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDistortion.band4k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDistortion.band8k.gain.setTargetAtTime(value,0,0.0001);">
+		<input type="range" orient="vertical" value="0.0" min="-10.0" max="10.0" step="1" onchange="channelDistortion.band16k.gain.setTargetAtTime(value,0,0.0001);">
+	</p>
+	<hr>		
+ </body>
+</html>
