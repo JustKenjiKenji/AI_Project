@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/@tonejs/midi"></script>
+    <title>Document</title>
+    <style type="text/css">
+			#FileDrop {
+				position: relative;
+				width: 100%;
+				height: 100px;
+				border: 2px dashed black;
+				color: black;
+				margin: 20px auto;
+			}
+
+			#FileDrop.Hover {
+				background-color: black;
+				color: white;
+			}
+
+			#FileDrop input {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				opacity: 0;
+				left: 0px;
+				top: 0px;
+			}
+
+			#FileDrop #Text {
+				position: absolute;
+				width: 100%;
+				height: 20px;
+				line-height: 20px;
+				left: 0px;
+				top: 50%;
+				transform: translate(0, -50%);
+				text-align: center;
+			}
+
+			textarea {
+				font-family: monospace;
+				height: 300px;
+				width: 100%;
+				display: inline-block;
+				position: relative;
+			}
+
+			#Results {
+				position: relative;
+				width: 100%;
+				margin: 10px auto;
+			}
+
+			#Description {
+				position: relative;
+				width: 100%;
+				text-align: center;
+				height: 40px;
+				font-size: 16px;
+				margin: 10px auto;
+				font-family: sans-serif;
+			}
+
+			tone-play-toggle {
+				margin-top: 10px;
+			}
+	</style>
+</head>
+<body>
+    <tone-content>
+			<div id="Description">
+				Parse a MIDI file into a Tone.js-friendly JSON format.
+			</div>
+			<div id="FileDrop" class="">
+				<div id="Text">HotLove.mid</div>
+				<input type="file" accept="audio/midi">
+			</div>
+			<div id="Results">
+				<textarea id="ResultsText" placeholder="json output..."></textarea>
+			</div>
+	</tone-content>
+	<tone-play-toggle disabled=""></tone-play-toggle>
+    <script src="midiTest.js"></script>
+</body>
+</html>

@@ -15,12 +15,12 @@ var C = 0, Cs = 1,
     B = 11;
 
 var O = 12;
-var _6th = E + O*3, 
-    _5th = A + O*3,
-    _4th = D + O*4, 
-    _3rd = G + O*4, 
-    _2nd = B + O*4, 
-    _1st = E + O*5;
+var _6th = E + O*2, 
+    _5th = A + O*2,
+    _4th = D + O*3, 
+    _3rd = G + O*3, 
+    _2nd = B + O*3, 
+    _1st = E + O*4;
 			
 var fretsAm = [-1, 0, 2, 2, 1, 0];
 var fretsC =  [-1, 3, 2, 0, 1, 0];
@@ -28,6 +28,7 @@ var fretsE =  [ 0, 2, 2, 1, 0, 0];
 var fretsG =  [ 3, 2, 0, 0, 0, 3];
 var fretsDm = [-1,-1, 0, 2, 3, 1];
 var fretsA7 = [-1,-1, 2, 2, 2, 3];
+var fretsCsus2 = [-1, 3,-1,-1, 1,-1];
 
 player.loader.decodeAfterLoading(audioContext, guitar);
 
