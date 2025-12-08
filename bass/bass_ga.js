@@ -1,7 +1,7 @@
 // bass_ga.js
 // Genetic algorithm bassline generator for 15 bars, A minor, 4/4, 16 steps per bar
 // No external libraries
-
+//lol
 // ----------------------------
 // 1) Project configuration
 // ----------------------------
