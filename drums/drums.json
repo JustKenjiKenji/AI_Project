@@ -1,0 +1,332 @@
+{
+  "instrument": "drums",
+  "stepsPerBar": 16,
+  "patterns": {
+    "full": [
+      {
+        "0": [
+          "kick",
+          "hihat",
+          "crash"
+        ],
+        "2": [
+          "hihat"
+        ],
+        "3": [
+          "kick"
+        ],
+        "4": [
+          "snare",
+          "hihat"
+        ],
+        "6": [
+          "hihat",
+          "kick"
+        ],
+        "8": [
+          "kick",
+          "hihat"
+        ],
+        "10": [
+          "hihat",
+          "kick"
+        ],
+        "12": [
+          "snare",
+          "hihat"
+        ],
+        "14": [
+          "hihat",
+          "snare"
+        ],
+        "15": [
+          "snare"
+        ]
+      },
+      {
+        "0": [
+          "kick",
+          "hihat"
+        ],
+        "2": [
+          "hihat"
+        ],
+        "3": [
+          "kick"
+        ],
+        "4": [
+          "snare",
+          "hihat"
+        ],
+        "6": [
+          "hihat",
+          "kick"
+        ],
+        "8": [
+          "kick",
+          "hihat"
+        ],
+        "10": [
+          "hihat",
+          "kick"
+        ],
+        "12": [
+          "snare",
+          "hihat"
+        ],
+        "14": [
+          "hihat",
+          "snare"
+        ],
+        "15": [
+          "snare"
+        ]
+      },
+      {
+        "0": [
+          "kick",
+          "hihat"
+        ],
+        "2": [
+          "hihat"
+        ],
+        "3": [
+          "kick"
+        ],
+        "4": [
+          "snare",
+          "hihat"
+        ],
+        "6": [
+          "hihat",
+          "kick"
+        ],
+        "8": [
+          "kick",
+          "hihat"
+        ],
+        "10": [
+          "hihat",
+          "kick"
+        ],
+        "12": [
+          "snare",
+          "hihat"
+        ],
+        "14": [
+          "hihat",
+          "snare"
+        ],
+        "15": [
+          "snare"
+        ]
+      },
+      {
+        "0": [
+          "kick",
+          "hihat"
+        ],
+        "2": [
+          "hihat"
+        ],
+        "3": [
+          "kick"
+        ],
+        "4": [
+          "snare",
+          "hihat"
+        ],
+        "6": [
+          "hihat",
+          "kick"
+        ],
+        "8": [
+          "kick",
+          "hihat"
+        ],
+        "10": [
+          "hihat",
+          "kick"
+        ],
+        "12": [
+          "snare",
+          "hihat"
+        ],
+        "14": [
+          "hihat",
+          "snare"
+        ],
+        "15": [
+          "snare",
+          "kick"
+        ]
+      },
+      {
+        "0": [
+          "kick",
+          "hihat",
+          "crash"
+        ],
+        "2": [
+          "hihat"
+        ],
+        "3": [
+          "kick"
+        ],
+        "4": [
+          "snare",
+          "hihat"
+        ],
+        "6": [
+          "hihat",
+          "kick"
+        ],
+        "8": [
+          "kick",
+          "hihat"
+        ],
+        "10": [
+          "hihat",
+          "kick"
+        ],
+        "12": [
+          "snare",
+          "hihat"
+        ],
+        "14": [
+          "hihat",
+          "snare"
+        ],
+        "15": [
+          "snare"
+        ]
+      },
+      {
+        "0": [
+          "kick",
+          "hihat"
+        ],
+        "2": [
+          "hihat"
+        ],
+        "3": [
+          "kick"
+        ],
+        "4": [
+          "snare",
+          "hihat"
+        ],
+        "6": [
+          "hihat",
+          "kick"
+        ],
+        "8": [
+          "kick",
+          "hihat"
+        ],
+        "10": [
+          "hihat",
+          "kick"
+        ],
+        "12": [
+          "snare",
+          "hihat"
+        ],
+        "14": [
+          "hihat",
+          "snare"
+        ],
+        "15": [
+          "snare"
+        ]
+      },
+      {
+        "0": [
+          "kick",
+          "hihat"
+        ],
+        "2": [
+          "hihat"
+        ],
+        "3": [
+          "kick"
+        ],
+        "4": [
+          "snare",
+          "hihat"
+        ],
+        "6": [
+          "hihat",
+          "kick"
+        ],
+        "8": [
+          "kick",
+          "hihat"
+        ],
+        "10": [
+          "hihat",
+          "kick"
+        ],
+        "12": [
+          "snare",
+          "hihat"
+        ],
+        "14": [
+          "hihat",
+          "snare"
+        ],
+        "15": [
+          "snare"
+        ]
+      },
+      {
+        "0": [
+          "kick",
+          "hihat"
+        ],
+        "2": [
+          "hihat"
+        ],
+        "3": [
+          "kick"
+        ],
+        "4": [
+          "snare",
+          "hihat"
+        ],
+        "6": [
+          "hihat",
+          "kick"
+        ],
+        "8": [
+          "kick",
+          "hihat"
+        ],
+        "10": [
+          "hihat",
+          "kick"
+        ],
+        "12": [
+          "snare",
+          "hihat"
+        ],
+        "14": [
+          "hihat",
+          "snare"
+        ],
+        "15": [
+          "snare",
+          "kick"
+        ]
+      }
+    ]
+  },
+  "bpm": 120,
+  "timeSignature": {
+    "num": 4,
+    "den": 4
+  },
+  "bars": 8,
+  "secondsPerBar": 2,
+  "totalDurationSeconds": 16
+}
