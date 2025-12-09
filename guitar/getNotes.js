@@ -1,5 +1,4 @@
 //FOR IMPORTING THE JSON FILE TO THE
-
 import data_getItOn from './midi_json/getItOn.json' with { type: "json" };
 import data_jeanGenie from './midi_json/JeanGenie.json' with { type: "json" };
 import data_rebelRebel from './midi_json/RebelRebel.json' with { type: "json" };
