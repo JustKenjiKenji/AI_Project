@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Strict Glam Rock Drums Player</title>
+
+  <!-- WebAudioFont Library -->
+  <script src="https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js"></script>
+
+  <!-- Drum SF2 Presets -->
+  <script src="https://surikov.github.io/webaudiofontdata/sound/12836_6_JCLive_sf2_file.js"></script>
+  <script src="https://surikov.github.io/webaudiofontdata/sound/12840_6_JCLive_sf2_file.js"></script>
+  <script src="https://surikov.github.io/webaudiofontdata/sound/12842_6_JCLive_sf2_file.js"></script>
+  <script src="https://surikov.github.io/webaudiofontdata/sound/12846_6_JCLive_sf2_file.js"></script>
+</head>
+
+<body>
+<h2>GA Drums Output Player</h2>
+
+<button onclick="start()">Play</button>
+<button onclick="stop()">Stop</button>
+
+<script>
+const AudioContextFunc = window.AudioContext || window.webkitAudioContext;
+const audioContext = new AudioContextFunc();
+const player = new WebAudioFontPlayer();
+const ticker = new WebAudioFontTicker();
+
+const gainDrums = audioContext.createGain();
+gainDrums.connect(audioContext.destination);
+gainDrums.gain.value = 0.8;
+
+const bpm = 120;
+const stepsPerBar = 16;
+const secondsPerStep = (60 / bpm) / 4; // 4 steps per beat (16 steps per bar, 4 beats)
+
+const DRUM_MAP = {
+  kick: () => ({ preset: _drum_36_6_JCLive_sf2_file, pitch: 36, gain: gainDrums }),
+  snare: () => ({ preset: _drum_40_6_JCLive_sf2_file, pitch: 40, gain: gainDrums }),
+  hihat: () => ({ preset: _drum_42_6_JCLive_sf2_file, pitch: 42, gain: gainDrums }),
+  crash: () => ({ preset: _drum_46_6_JCLive_sf2_file, pitch: 46, gain: gainDrums })
+};
+
+// Decode presets
+player.loader.decodeAfterLoading(audioContext, '_drum_36_6_JCLive_sf2_file');
+player.loader.decodeAfterLoading(audioContext, '_drum_40_6_JCLive_sf2_file');
+player.loader.decodeAfterLoading(audioContext, '_drum_42_6_JCLive_sf2_file');
+player.loader.decodeAfterLoading(audioContext, '_drum_46_6_JCLive_sf2_file');
+
+let audioQueue = [];
+
+// Load strict GA drums JSON
+async function loadTrack() {
+  const data = await fetch("drums.json").then(r => r.json());
+  const bars = data.patterns.full;
+
+  audioQueue = [];
+  let stepCounter = 0;
+
+  for (let bar of bars) {
+    for (let step = 0; step < stepsPerBar; step++) {
+      const hits = bar[step] || [];
+      const when = stepCounter * secondsPerStep;
+
+      for (let drum of hits) {
+        const note = DRUM_MAP[drum]();
+        audioQueue.push({
+          destination: note.gain,
+          preset: note.preset,
+          when,
+          pitch: note.pitch,
+          duration: 0.5,
+          volume: 0.9,
+          slides: []
+        });
+      }
+
+      stepCounter++;
+    }
+  }
+}
+
+// Play function
+async function start() {
+  await audioContext.resume();
+  await loadTrack();
+  if (audioQueue.length === 0) return;
+
+  const totalTime = audioQueue[audioQueue.length - 1].when + secondsPerStep;
+  ticker.playLoop(player, audioContext, 0, 0, totalTime, audioQueue);
+}
+
+// Stop function
+function stop() {
+  ticker.cancel();
+}
+</script>
+</body>
+</html>

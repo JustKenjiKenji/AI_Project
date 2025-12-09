@@ -1,0 +1,36 @@
+{
+  "dataset": [
+    {
+      "song": "Rebel Rebel - Bowie",
+      "bars": [
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]},
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]},
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]},
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]}
+      ]
+    },
+    {
+      "song": "Jeeptster - T. Rex",
+      "bars": [
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]},
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]},
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]},
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]}
+      ]
+    },
+    {
+      "song": "Jitterbug Love - T. Rex",
+      "bars": [
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]},
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]}
+      ]
+    },
+    {
+      "song": "Get It On - T. Rex",
+      "bars": [
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]},
+        {"0":["kick","hihat"],"4":["snare","hihat"],"8":["kick","hihat"],"12":["snare","hihat"]}
+      ]
+    }
+  ]
+}
