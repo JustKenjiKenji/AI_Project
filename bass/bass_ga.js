@@ -15,13 +15,15 @@ const CONFIG = {
     { name: "B", bars: 8 }
   ],
   playOrder: ["A", "B", "A"],
-  totalBars: 15
+  totalBars: 16
 };
 
 // ----------------------------
 // 2) Musical constants
 // ----------------------------
-const SCALE = ["A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3"];
+const SCALE = [
+  "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3"
+];
 const ROOT_NOTE = "A2";
 const STRONG_STEPS = new Set([0, 4, 8, 12]); // beats 1, 2, 3, 4 in 16 step grid
 
@@ -390,3 +392,8 @@ for (const b of score.bass) {
     `[${b.index.toString().padStart(2, "0")}] ${b.section} | ${b.pattern}`
   );
 }
+
+// print final output as one array of bar strings
+const allBarsArray = score.bass.map(b => b.pattern);
+console.log("\nONE ARRAY OF BASS BARS:");
+console.log(JSON.stringify(allBarsArray));
