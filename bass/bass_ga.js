@@ -54,6 +54,23 @@ function profileFor(name) {
   return name === "B" ? PROFILE_B : PROFILE_A;
 }
 
+
+// map note names in SCALE to MIDI numbers
+function noteToMidi(note) {
+  switch (note) {
+    case "A2": return 45;
+    case "B2": return 47;
+    case "C3": return 48;
+    case "D3": return 50;
+    case "E3": return 52;
+    case "F3": return 53;
+    case "G3": return 55;
+    case "A3": return 57;
+    default:   return null; // for "--" or anything unknown
+  }
+}
+
+
 // ----------------------------
 // 3) Utilities
 // ----------------------------
@@ -383,17 +400,49 @@ function generateBassScore() {
 // ----------------------------
 // 10) Run and print
 // ----------------------------
-const score = generateBassScore();
-console.log(JSON.stringify(score, null, 2));
+// ----------------------------
+// 10) Run and print
+// ----------------------------
+// ----------------------------
+// 10) Run and print
+// ----------------------------
+const finalScore = generateBassScore();
 
-console.log("\n=== Bass, 15 bars, A minor, 4/4, 16 steps (GA based) ===\n");
-for (const b of score.bass) {
+console.log("\n=== Bass, 16 bars, A minor, 4/4, 16 steps (GA based) ===\n");
+for (const b of finalScore.bass) {
   console.log(
     `[${b.index.toString().padStart(2, "0")}] ${b.section} | ${b.pattern}`
   );
 }
 
-// print final output as one array of bar strings
-const allBarsArray = score.bass.map(b => b.pattern);
+// one array of bar strings
+const allBarsArray = finalScore.bass.map(b => b.pattern);
 console.log("\nONE ARRAY OF BASS BARS:");
 console.log(JSON.stringify(allBarsArray));
+
+// noteToMidi helper (if you have not added it yet)
+
+
+// write JSON file for later use
+const fs = require("fs");
+
+const midiScore = {
+  config: finalScore.config,
+  bass: finalScore.bass.map(barObj => {
+    const tokens = barObj.pattern.split(" ");
+    const midiNotes = tokens.map(t => (t === "--" ? null : noteToMidi(t)));
+    return {
+      section: barObj.section,
+      index: barObj.index,
+      notes: midiNotes
+    };
+  })
+};
+
+fs.writeFileSync(
+  "bass_score_midi.json",
+  JSON.stringify(midiScore, null, 2),
+  "utf8"
+);
+
+console.log("Wrote bass_score_midi.json to disk.");
