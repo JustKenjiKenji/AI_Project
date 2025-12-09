@@ -400,12 +400,7 @@ function generateBassScore() {
 // ----------------------------
 // 10) Run and print
 // ----------------------------
-// ----------------------------
-// 10) Run and print
-// ----------------------------
-// ----------------------------
-// 10) Run and print
-// ----------------------------
+
 const finalScore = generateBassScore();
 
 console.log("\n=== Bass, 16 bars, A minor, 4/4, 16 steps (GA based) ===\n");
