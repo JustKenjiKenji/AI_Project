@@ -11,7 +11,7 @@
       {
         "text": "(C)1993-1995 Audio Production",
         "ticks": 0,
-        "type": "text"
+        "type": "json"
       }
     ],
     "name": "Sequence",
