@@ -73,11 +73,10 @@ const probabilities = computeProbabilities(chain1);
 //onsole.log(Object.keys(chain1));
 var testChildren = 0;
 while(testChildren == 0){
-    testChildren = evaluation(20, chain1);
+    testChildren = evaluation(20, chain1); //Tests with 20 children
 }
-//export {testChildren}; //EXPORTS CHILD TO THE OTHER FILE
-var steps_16 = makeIntoBar(testChildren[0]);
-//Makes it into 8 bars x 16 steps
+var steps_16 = makeIntoBar(testChildren[0]); //Gets the first child
+//Makes it into 8 bars x 16 steps 
 let bar_8 = [];
 for(let i = 0; i < 8; i++){
     bar_8.push(steps_16);
@@ -149,6 +148,24 @@ function insertRandomGaps(child, gapChance = 0.3) {
     return mutated;
 }
 
+function hasTripleRepeat(sequence) {
+    let count = 1;
+
+    for (let i = 1; i < sequence.length; i++) {
+        // Check deep equality
+        const prev = JSON.stringify(sequence[i - 1]);
+        const curr = JSON.stringify(sequence[i]);
+
+        if (prev === curr) {
+            count++;
+            if (count >= 3) return false;  // found 3 repeats
+        } else {
+            count = 1; // reset
+        }
+    }
+    return true;
+}
+
 
 function evaluation(memberSize, chain){
     let counter = 0;
@@ -166,6 +183,7 @@ function evaluation(memberSize, chain){
     children = children.map(child => insertRandomGaps(child, 0.4));
     children = children.filter(child => child.length > 15);
     children = children.filter(child => countAllNaNs(child) < 5);
+    children = children.filter(child => hasTripleRepeat(child));
     console.log("CHILDREN ALIVE:",children.length);
     console.log(children);
     return children;
