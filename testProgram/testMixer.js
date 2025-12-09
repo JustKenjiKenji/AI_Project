@@ -137,21 +137,22 @@ function nextPiece() {
 		}		
 	}		
 }		
-		function start() {		
-			if (started) {		
-				console.log('started already');		
-			} else {		
-				started = true;		
-				startTime = audioContext.currentTime + 0.1;		
+
+function start() {		
+	if (started) {		
+		console.log('started already');		
+	} else {		
+		started = true;		
+		startTime = audioContext.currentTime + 0.1;		
+		nextPiece();		
+		startTime = startTime + pieceLen;		
+		setInterval(function () {		
+			if (audioContext.currentTime > startTime - 1 / 4 * N) {		
 				nextPiece();		
 				startTime = startTime + pieceLen;		
-				setInterval(function () {		
-					if (audioContext.currentTime > startTime - 1 / 4 * N) {		
-						nextPiece();		
-						startTime = startTime + pieceLen;		
-					}		
-				}, 20);		
 			}		
-		}		
+		}, 20);		
+	}		
+}		
 
 	

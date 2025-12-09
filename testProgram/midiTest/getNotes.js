@@ -60,7 +60,6 @@ const chain3 = buildMarkovChain(mappedChords_rebelRebel);
 const chain4 = buildMarkovChain(mappedChords_jeepster);
 const chain5 = buildMarkovChain(mappedChords_jitterbug);
 
-
 mergeChains(chain1, chain2);
 mergeChains(chain1, chain3);
 mergeChains(chain1, chain4);
@@ -68,26 +67,145 @@ mergeChains(chain1, chain5);
 
 const probabilities = computeProbabilities(chain1);
 
-console.log("Raw Markov Chain:", chain1);
-console.log("Probability Table:", probabilities);
+//console.log("Raw Markov Chain:", chain1);
+//console.log("Probability Table:", probabilities);
 
-console.log(Object.keys(chain1));
+//onsole.log(Object.keys(chain1));
+var testChildren = 0;
+while(testChildren == 0){
+    testChildren = evaluation(20, chain1);
+}
+//export {testChildren}; //EXPORTS CHILD TO THE OTHER FILE
+var steps_16 = makeIntoBar(testChildren[0]);
+//Makes it into 8 bars x 16 steps
+let bar_8 = [];
+for(let i = 0; i < 8; i++){
+    bar_8.push(steps_16);
+}
+console.log("8 BARS X 16 STEPS");
+console.log(bar_8);
+export {bar_8};
 
-const randomItem = randomKey(chain1);
-console.log(randomItem);
-
-const generated = generateSequence(probabilities, randomItem, 128);
-console.log("Generated Sequence:", generated);
-var normGeneration = normalizeArray(generated);
-export {normGeneration};
 
 
+//MAKE THE ENTIRE ARRAY OF 16 NOTES
+function makeIntoBar(child){
+    var perBar = [];
+    for(let s = 0; s < 16; s++){
+        var roundIndex = s % child.length;
+        var toNum = parseNum(child[roundIndex])
+        perBar.push(toNum);
+    }
+    console.log(perBar);
+    return perBar;
+}
 
+function parseNum(num){
+    console.log("THING TO PARSE: ", num);
+    if(Array.isArray(num) && num.length > 1){
+        console.log("CHORDS", num);
+        for(let x = 0; x < num.length; x++){
+            num[x] = parsePitch(num[x]);
+        }
+    }else{
+        console.log("NOTE", num);
+        num = parsePitch(num+"");
+    }
+    return num;
+}
+
+function parsePitch(str) {
+    console.log("STRING =",str);
+    const table = { C:0, D:2, E:4, F:5, G:7, A:9, B:11 };
+    const base = table[str[0]];
+    let semitone = base;
+    let octave;
+    console.log(base);
+    //IF '#' is present, then do the semitone as sharp, else we use the 
+    const isSharp = (str[1] === "#");
+    if(isSharp){
+        semitone += 1;
+        octave = parseInt(str[2]); 
+    }else{
+        octave = parseInt(str[1]);
+    }
+    console.log(semitone + octave * 12);
+    return semitone + octave * 12;
+}
+
+function insertRandomGaps(child, gapChance = 0.3) {
+    const mutated = [];
+
+    for (let i = 0; i < child.length; i++) {
+        // add the original chord
+        mutated.push(child[i]);
+
+        // randomly decide to insert a gap AFTER it
+        if (Math.random() < gapChance) {
+            mutated.push(NaN); // the gap
+        }
+    }
+
+    return mutated;
+}
+
+
+function evaluation(memberSize, chain){
+    let counter = 0;
+    let children = [];
+    while(counter != memberSize){
+        const randomItem = randomKey(chain);
+        const generated = generateSequence(probabilities, randomItem, 128);
+        console.log(`Generated Sequence ${counter+1} :`, generated);
+        children.push(generated);
+        counter++;
+        //var normGeneration = normalizeArray(generated);
+    }
+    //TESTING LENGTH OF CHORDS == 4
+    children = removeDuplicateChildren(children);
+    children = children.map(child => insertRandomGaps(child, 0.4));
+    children = children.filter(child => child.length > 15);
+    children = children.filter(child => countAllNaNs(child) < 5);
+    console.log("CHILDREN ALIVE:",children.length);
+    console.log(children);
+    return children;
+}
+
+function removeDuplicateChildren(children) {
+    const seen = new Set();
+
+    return children.filter(child => {
+        const key = JSON.stringify(child);  // deep identity
+        
+        if (seen.has(key)) {
+            return false; // duplicate -> filtered out
+        }
+
+        seen.add(key);
+        return true;
+    });
+}
+
+function countAllNaNs(children) {
+    let count = 0;
+
+    function scan(value) {
+        if (Array.isArray(value)) {
+            value.forEach(scan); // recursive for arrays
+        } else {
+            // Only NaN is not equal to itself
+            if (value !== value) count++;
+        }
+    }
+
+    scan(children);
+    return count;
+}
 
 
 function normalizeArray(arr){
     let i = 0;
-    for(const data of generated){
+    for(const data of arr){
         if(Array.isArray(data) && data.length > 1){
             arr[i] = data;
         }else{
@@ -217,12 +335,12 @@ function generateSequence(probTable, startState, length = 16) {
     let state = startState;
     let curr = randomKey(probTable[state]); // curr is e.g. '["E2","B2"]' or '["E2"]' etc.
 
-    //MAKES A PATTERN OF 4, THEN WE SHOULD USE DURATION FOR KNOWING WHEN TO DO ON THE MATRIX
-    for (let i = 0; i < 3; i++) {
+    //MAKES A PATTERN FOR 16 STEPS
+    for (let i = 0; i < 16; i++) {
         const transitions = probTable[state] && probTable[state][curr];
         if (!transitions) {
         // if there is no transitions for this curr in this state try to pick a different curr inside state
-            if (probTable[state] && Object.keys(probTable[state]).length > 0) {
+            if (probTable[state]) {
                 curr = randomKey(probTable[state]);
                 continue; // attempt again with new curr
             }
